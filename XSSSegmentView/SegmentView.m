@@ -80,11 +80,11 @@ SegmentView *segment;
     return self;
 }
 #pragma mark - 供外部调用的方法
--(void)addItems:(NSArray *)items frame:(CGRect)frame inView:(UIView *)view{
+-(void)addItems1:(NSArray *)items frame:(CGRect)frame inView:(UIView *)view{
     backView = view;
     tempFrame = frame;
     segment.frame = frame;
-    [segment addItems:items];
+    [segment addItems2:items];
     [view addSubview:segment];
     [self addSwipGestureIn:view];
 }
@@ -92,12 +92,12 @@ SegmentView *segment;
     backView = view;
     tempFrame = frame;
     segment.frame = frame;
-    [segment addItems:titles selectedImage:selectedImage];
+    [segment addItems3:titles selectedImage:selectedImage];
     [view addSubview:segment];
     [self addSwipGestureIn:view];
 }
 #pragma mark - 添加标题
--(void)addItems:(NSArray *)items{
+-(void)addItems2:(NSArray *)items{
     itemCount = (int) items.count;
     titleWidth=(self.bounds.size.width)/itemCount;
     for (int i=0; i<items.count; i++) {
@@ -123,7 +123,7 @@ SegmentView *segment;
     }
     
 }
--(void)addItems:(NSArray *)items selectedImage:(NSString *)selectedImage{
+-(void)addItems3:(NSArray *)items selectedImage:(NSString *)selectedImage{
     itemCount = (int) items.count;
     titleWidth=(self.bounds.size.width)/itemCount;
     selectedImageName = selectedImage;
