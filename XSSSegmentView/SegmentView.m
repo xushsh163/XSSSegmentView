@@ -80,11 +80,11 @@ SegmentView *segment;
     return self;
 }
 #pragma mark - 供外部调用的方法
--(void)addItems1:(NSArray *)items frame:(CGRect)frame inView:(UIView *)view{
+-(void)addItems:(NSArray *)items frame:(CGRect)frame inView:(UIView *)view{
     backView = view;
     tempFrame = frame;
     segment.frame = frame;
-    [segment addItems2:items];
+    [segment addItems:items];
     [view addSubview:segment];
     [self addSwipGestureIn:view];
 }
@@ -92,12 +92,12 @@ SegmentView *segment;
     backView = view;
     tempFrame = frame;
     segment.frame = frame;
-    [segment addItems3:titles selectedImage:selectedImage];
+    [segment addItems:titles selectedImage:selectedImage];
     [view addSubview:segment];
     [self addSwipGestureIn:view];
 }
 #pragma mark - 添加标题
--(void)addItems2:(NSArray *)items{
+-(void)addItems:(NSArray *)items{
     itemCount = (int) items.count;
     titleWidth=(self.bounds.size.width)/itemCount;
     for (int i=0; i<items.count; i++) {
@@ -121,9 +121,17 @@ SegmentView *segment;
     }else{
         [[self.itemArray firstObject] setSelected:YES];
     }
-    
 }
--(void)addItems3:(NSArray *)items selectedImage:(NSString *)selectedImage{
+
+#pragma mark - 替换标题
+-(void)replaceItems:(NSArray *)items{
+    [[segment subviews]
+     makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [self.itemArray removeAllObjects];
+    [segment addItems:items];
+}
+
+-(void)addItems:(NSArray *)items selectedImage:(NSString *)selectedImage{
     itemCount = (int) items.count;
     titleWidth=(self.bounds.size.width)/itemCount;
     selectedImageName = selectedImage;

@@ -63,13 +63,13 @@
 -(void)simpleUse{
     seg = [SegmentView initSegment];
     seg.delegate = self;
-    [seg addItems1:@[@"标题0",@"标题1",@"标题2"] frame:CGRectMake(0, 264, self.view.frame.size.width, 88) inView:self.view];
+    [seg addItems:@[@"标题0",@"标题1",@"标题2"] frame:CGRectMake(0, 264, self.view.frame.size.width, 88) inView:self.view];
 }
 //1、非定制Views和controller的使用
 -(void)usage{
     seg = [SegmentView initSegment];
     seg.delegate = self;
-    [seg addItems1:@[@"标题0",@"标题1",@"标题2"] frame:CGRectMake(0, 64, self.view.frame.size.width, 34) inView:self.view];
+    [seg addItems:@[@"标题0",@"标题1",@"标题2"] frame:CGRectMake(0, 64, self.view.frame.size.width, 34) inView:self.view];
     //自定义segment属性，（可选）
     //    [self propertySet];
 }
@@ -81,7 +81,7 @@
     [titleArry addObject:@"标题0"];
     [titleArry addObject:@"标题2"];
     [titleArry addObject:@"标题3"];
-    [seg addItems1:titleArry frame:CGRectMake(0, 164, self.view.frame.size.width, 34) inView:self.view];
+    [seg addItems:titleArry frame:CGRectMake(0, 164, self.view.frame.size.width, 34) inView:self.view];
     viewArr = [[NSMutableArray alloc] init];
     for (int i=0; i<3; i++) {
         UIView *view = [[UIView alloc] init];
@@ -94,6 +94,17 @@
     seg.segSubviews = viewArr;
     seg.lineColor = [UIColor colorWithRed:NUM green:NUM blue:NUM alpha:1.0f];
     seg.selectColor = [UIColor colorWithRed:NUM green:NUM blue:NUM alpha:1.0f];
+    [seg replaceItems:@[@"标题11",@"标题22",@"标题33",@"标题44"]];
+    [viewArr removeAllObjects];
+    for (int i=0; i<4; i++) {
+        UIView *view = [[UIView alloc] init];
+        view.backgroundColor=[UIColor colorWithRed:NUM green:NUM blue:NUM alpha:1.0f];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake( 30, 40, 150, 20)];
+        label.text = [NSString stringWithFormat:@"这是第%d个view(2)",i];
+        [view addSubview:label];
+        [viewArr addObject:view];
+    }
+    seg.segSubviews = viewArr;
     //自定义segment属性，（可选）
     //    [self propertySet];
 }
@@ -101,7 +112,7 @@
 -(void)controllersUse{
     seg = [SegmentView initSegment];
     seg.delegate = self;
-    [seg addItems1:@[@"标题0",@"标题1",@"标题2"] frame:CGRectMake(0, 64, self.view.frame.size.width, 34) inView:self.view];
+    [seg addItems:@[@"标题0",@"标题1",@"标题2"] frame:CGRectMake(0, 64, self.view.frame.size.width, 34) inView:self.view];
     //设置各个item对应的controller
     ViewController0 *v0 = [[ViewController0 alloc] init];
     ViewController1 *v1 = [[ViewController1 alloc] init];
