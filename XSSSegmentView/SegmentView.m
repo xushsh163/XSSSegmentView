@@ -150,6 +150,7 @@ SegmentView *segment;
      makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [self.itemArray removeAllObjects];
     [segment addItems:items];
+    [self addSubview:lineView];
 }
 
 -(void)addItems:(NSArray *)items selectedImage:(NSString *)selectedImage{
