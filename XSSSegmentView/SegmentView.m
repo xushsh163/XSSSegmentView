@@ -79,6 +79,10 @@ SegmentView *segment;
     }
     return self;
 }
+- (void) willMoveToWindow:(nullable UIWindow *)newWindow; {
+    [super willMoveToWindow:newWindow];
+    [self resetItemView];
+}
 #pragma mark - 供外部调用的方法
 -(void)addItems:(NSArray *)items frame:(CGRect)frame inView:(UIView *)view{
     backView = view;
@@ -115,6 +119,23 @@ SegmentView *segment;
         }
         [self addSubview:button];
         [self.itemArray addObject:button];
+    }
+    if (kDefaultIndex < itemCount) {
+        [self.itemArray[kDefaultIndex] setSelected:YES];
+    }else{
+        [[self.itemArray firstObject] setSelected:YES];
+    }
+}
+
+-(void)resetItemView {
+    itemCount = (int) self.itemArray.count;
+    titleWidth=(self.bounds.size.width)/itemCount;
+    for (int i=0; i<itemCount; i++) {
+        UIButton* button = [self.itemArray objectAtIndex:i];
+        [button setFrame:CGRectMake(i*titleWidth, 0, titleWidth, self.bounds.size.height-2)];
+        if (lineView) {
+            [lineView setFrame:CGRectMake((kDefaultIndex < itemCount ? kDefaultIndex: 0) * titleWidth, self.bounds.size.height-2, titleWidth, 2)];
+        }
     }
     if (kDefaultIndex < itemCount) {
         [self.itemArray[kDefaultIndex] setSelected:YES];

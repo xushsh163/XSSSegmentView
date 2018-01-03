@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../XSSSegmentView/SegmentView.m"
-            timestampString = "536554026.115148"
+            timestampString = "536659530.014655"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "195"
-            endingLineNumber = "195"
+            startingLineNumber = "216"
+            endingLineNumber = "216"
             landmarkName = "-handleSelectItemEventWith:"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../XSSSegmentView/SegmentView.m"
-            timestampString = "536554026.115251"
+            timestampString = "536659530.014983"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "190"
-            endingLineNumber = "190"
+            startingLineNumber = "211"
+            endingLineNumber = "211"
             landmarkName = "-selectIndex:"
             landmarkType = "7">
          </BreakpointContent>
@@ -38,15 +38,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../XSSSegmentView/SegmentView.m"
-            timestampString = "536554026.115315"
+            timestampString = "536659530.015199"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "331"
-            endingLineNumber = "331"
+            startingLineNumber = "352"
+            endingLineNumber = "352"
             landmarkName = "-swipTheScreen:"
             landmarkType = "7">
          </BreakpointContent>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "XSSSegmentViewDemo/ViewController.m"
-            timestampString = "536554026.11538"
+            timestampString = "536640623.206843"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "204"
-            endingLineNumber = "204"
+            startingLineNumber = "205"
+            endingLineNumber = "205"
             landmarkName = "-didSelectSegmentAtIndex:"
             landmarkType = "7">
          </BreakpointContent>

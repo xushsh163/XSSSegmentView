@@ -81,7 +81,7 @@
     [titleArry addObject:@"标题0"];
     [titleArry addObject:@"标题2"];
     [titleArry addObject:@"标题3"];
-    [seg addItems:titleArry frame:CGRectMake(0, 164, self.view.frame.size.width, 34) inView:self.view];
+    [seg addItems:titleArry frame:CGRectMake(0, 164, self.view.frame.size.width, 188) inView:self.view];
     viewArr = [[NSMutableArray alloc] init];
     for (int i=0; i<3; i++) {
         UIView *view = [[UIView alloc] init];
@@ -94,17 +94,18 @@
     seg.segSubviews = viewArr;
     seg.lineColor = [UIColor colorWithRed:NUM green:NUM blue:NUM alpha:1.0f];
     seg.selectColor = [UIColor colorWithRed:NUM green:NUM blue:NUM alpha:1.0f];
-    [seg replaceItems:@[@"标题11",@"标题22",@"标题33",@"标题44"]];
-    [viewArr removeAllObjects];
-    for (int i=0; i<4; i++) {
-        UIView *view = [[UIView alloc] init];
-        view.backgroundColor=[UIColor colorWithRed:NUM green:NUM blue:NUM alpha:1.0f];
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake( 30, 40, 150, 20)];
-        label.text = [NSString stringWithFormat:@"这是第%d个view(2)",i];
-        [view addSubview:label];
-        [viewArr addObject:view];
-    }
-    seg.segSubviews = viewArr;
+//    [seg replaceItems:@[@"标题11",@"标题22",@"标题33",@"标题44"]];
+//    [seg.itemArray[0] setTitle:@"测试修改" forState:UIControlStateNormal];
+//    [viewArr removeAllObjects];
+//    for (int i=0; i<4; i++) {
+//        UIView *view = [[UIView alloc] init];
+//        view.backgroundColor=[UIColor colorWithRed:NUM green:NUM blue:NUM alpha:1.0f];
+//        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake( 30, 40, 150, 20)];
+//        label.text = [NSString stringWithFormat:@"这是第%d个view(2)",i];
+//        [view addSubview:label];
+//        [viewArr addObject:view];
+//    }
+//    seg.segSubviews = viewArr;
     //自定义segment属性，（可选）
     //    [self propertySet];
 }
