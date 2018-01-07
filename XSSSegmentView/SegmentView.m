@@ -44,11 +44,9 @@
 
 @implementation SegmentView
 
-SegmentView *segment;
 #pragma mark - 创建segment
 +(instancetype )initSegment{
-    segment = [[self alloc] init];
-    return segment;
+    return [[self alloc] init];
 }
 #pragma mark - 初始化
 -(instancetype )init{
@@ -89,22 +87,23 @@ SegmentView *segment;
 -(void)addItems:(NSArray *)items frame:(CGRect)frame inView:(UIView *)view{
     backView = view;
     tempFrame = frame;
-    segment.frame = frame;
-    [segment addItems:items];
-    [view addSubview:segment];
+    self.frame = frame;
+    [self addItems:items];
+    [view addSubview:self];
     [self addSwipGestureIn:view];
 }
 -(void)addItemsWithFrame:(CGRect)frame titles:(NSArray *)titles selectedImage:(NSString *)selectedImage inView:(UIView *)view{
     backView = view;
     tempFrame = frame;
-    segment.frame = frame;
-    [segment addItems:titles selectedImage:selectedImage];
-    [view addSubview:segment];
+    self.frame = frame;
+    [self addItems:titles selectedImage:selectedImage];
+    [view addSubview:self];
     [self addSwipGestureIn:view];
 }
 #pragma mark - 添加标题
 -(void)addItems:(NSArray *)items{
     itemCount = (int) items.count;
+    // kDLOG(@"height=%f", self.bounds.size.height);
     titleWidth=(self.bounds.size.width)/itemCount;
     for (int i=0; i<items.count; i++) {
         UIButton* button=[[UIButton alloc]initWithFrame:CGRectMake(i*titleWidth, 0, titleWidth, self.bounds.size.height-2)];
@@ -138,6 +137,7 @@ SegmentView *segment;
     // self.segmentBackgroundColor=[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f];
     for (int i=0; i<itemCount; i++) {
         UIButton* button = [self.itemArray objectAtIndex:i];
+        // kDLOG(@"height=%f", self.bounds.size.height);
         [button setFrame:CGRectMake(i*titleWidth, 0, titleWidth, self.bounds.size.height-2)];
         if (lineView) {
             [lineView setFrame:CGRectMake((kDefaultIndex < itemCount ? kDefaultIndex: 0) * titleWidth, self.bounds.size.height-2, titleWidth, 2)];
@@ -152,10 +152,10 @@ SegmentView *segment;
 
 #pragma mark - 替换标题
 -(void)replaceItems:(NSArray *)items{
-    [[segment subviews]
+    [[self subviews]
      makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [self.itemArray removeAllObjects];
-    [segment addItems:items];
+    [self addItems:items];
     [self addSubview:lineView];
 }
 -(void)updateBackgroundColor{
