@@ -33,7 +33,7 @@
     UIView    *backView;//segment添加到的view
     UIView    *lineView;
     CGFloat    titleWidth;
-//    NSInteger  selectedIndex;
+    //    NSInteger  selectedIndex;
     int        itemCount;
     int        buttonTag;
     CGRect     tempFrame;//保存segment的frame
@@ -64,11 +64,13 @@ SegmentView *segment;
         self.selectedIndex = kDefaultIndex;
         self.titleFont = kTitleFont;
         self.segmentBackgroundColor = kSegmentBackgroundColor;
+        self.selectedBackgroundColor = kSegmentBackgroundColor;
         self.titleColor = kTitleColor;
         self.selectColor = kSelectedColor;
-        [self setBackgroundColor:self.segmentBackgroundColor];
+        // [self setBackgroundColor:self.segmentBackgroundColor];
         //使用kvo监测属性值变化
         [self addObserver:self forKeyPath:@"segmentBackgroundColor" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:@"backgroundColor"];
+        [self addObserver:self forKeyPath:@"selectedBackgroundColor" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:@"selectedBackgroundColor"];
         [self addObserver:self forKeyPath:@"titleColor" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:@"titleColor"];
         [self addObserver:self forKeyPath:@"selectColor" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:@"selectColor"];
         [self addObserver:self forKeyPath:@"titleFont" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:@"titleFont"];
@@ -110,6 +112,7 @@ SegmentView *segment;
         [button.titleLabel setFont:self.titleFont];
         [button setTitleColor:self.titleColor forState:UIControlStateNormal];
         [button setTitleColor:self.selectColor forState:UIControlStateSelected];
+        [button setBackgroundColor:self.segmentBackgroundColor];
         [button setTag:i];
         [button addTarget:self action:@selector(changeTheSegment:) forControlEvents:UIControlEventTouchUpInside];
         if (!lineView) {
@@ -122,14 +125,17 @@ SegmentView *segment;
     }
     if (kDefaultIndex < itemCount) {
         [self.itemArray[kDefaultIndex] setSelected:YES];
+        [self.itemArray[kDefaultIndex] setBackgroundColor:self.selectedBackgroundColor];
     }else{
         [[self.itemArray firstObject] setSelected:YES];
+        [[self.itemArray firstObject] setBackgroundColor:self.selectedBackgroundColor];
     }
 }
 
 -(void)resetItemView {
     itemCount = (int) self.itemArray.count;
     titleWidth=(self.bounds.size.width)/itemCount;
+    // self.segmentBackgroundColor=[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f];
     for (int i=0; i<itemCount; i++) {
         UIButton* button = [self.itemArray objectAtIndex:i];
         [button setFrame:CGRectMake(i*titleWidth, 0, titleWidth, self.bounds.size.height-2)];
@@ -152,6 +158,16 @@ SegmentView *segment;
     [segment addItems:items];
     [self addSubview:lineView];
 }
+-(void)updateBackgroundColor{
+    for (int i=0; i<self.itemArray.count; i++) {
+        UIButton* button = self.itemArray[i];
+        if (self.selectedIndex == i) {
+            [button setBackgroundColor:self.selectedBackgroundColor];
+        } else {
+            [button setBackgroundColor:self.segmentBackgroundColor];
+        }
+    }
+}
 
 -(void)addItems:(NSArray *)items selectedImage:(NSString *)selectedImage{
     itemCount = (int) items.count;
@@ -163,6 +179,7 @@ SegmentView *segment;
         [button.titleLabel setFont:self.titleFont];
         [button setTitleColor:self.titleColor forState:UIControlStateNormal];
         [button setTitleColor:self.selectColor forState:UIControlStateSelected];
+        [button setBackgroundColor:self.segmentBackgroundColor];
         
         button.imageView.contentMode = UIViewContentModeScaleAspectFit;
         [button setTag:i];
@@ -176,8 +193,10 @@ SegmentView *segment;
     [nowButton setTitleEdgeInsets:UIEdgeInsetsMake(0, -nowButton.currentImage.size.width, 0, 0)];
     if (kDefaultIndex < itemCount) {
         [self.itemArray[kDefaultIndex] setSelected:YES];
+        [self.itemArray[kDefaultIndex] setBackgroundColor:self.selectedBackgroundColor];
     }else{
         [[self.itemArray firstObject] setSelected:YES];
+        [[self.itemArray firstObject] setBackgroundColor:self.selectedBackgroundColor];
     }
 }
 -(void)changeTheSegment:(UIButton*)button
@@ -273,7 +292,12 @@ SegmentView *segment;
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     NSString *cate = (__bridge NSString *)context;
     if ([cate isEqualToString:@"backgroundColor"]) {
-        [self setBackgroundColor:self.segmentBackgroundColor];
+        // [self setBackgroundColor:self.segmentBackgroundColor];
+        [self updateBackgroundColor];
+    }
+    if ([cate isEqualToString:@"selectedBackgroundColor"]) {
+        // [self setBackgroundColor:self.segmentBackgroundColor];
+        [self updateBackgroundColor];
     }
     if ([cate isEqualToString:@"lineColor"]) {
         [lineView setBackgroundColor:self.lineColor];
@@ -284,28 +308,31 @@ SegmentView *segment;
     if ([cate isEqualToString:@"subControllers"]) {
         [self resetControllers];
     }
-//    if ([cate isEqualToString:@"selectedIndex"]) {
-//        UIButton *btn = self.itemArray[self.selectedIndex];
-//        [self changeTheSegment:btn];
-//        if (self.segSubviews.count) {
-//            [self resetViews];
-//        }else if (self.segSubControllers.count){
-//            [self resetControllers];
-//        }else{
-//            [self handleSelectItemEventWith:self.selectedIndex];
-//        }
-//    }
-    for (UIButton *button in self.subviews) {
-        if ([button isKindOfClass:[UIButton class]]) {
-            if ([cate isEqualToString:@"titleColor"]){
-                [button setTitleColor:self.titleColor forState:UIControlStateNormal];
-            }else if ([cate isEqualToString:@"selectColor"]){
-                [button setTitleColor:self.selectColor forState:UIControlStateSelected];
-            }else if ([cate isEqualToString:@"titleFont"]){
-                [button.titleLabel setFont:self.titleFont];
+    if ([cate isEqualToString:@"selectedIndex"]) {
+        [self updateBackgroundColor];
+        //        UIButton *btn = self.itemArray[self.selectedIndex];
+        //        [self changeTheSegment:btn];
+        //        if (self.segSubviews.count) {
+        //            [self resetViews];
+        //        }else if (self.segSubControllers.count){
+        //            [self resetControllers];
+        //        }else{
+        //            [self handleSelectItemEventWith:self.selectedIndex];
+        //        }
+    }
+    if ([cate isEqualToString:@"titleColor"] || [cate isEqualToString:@"selectColor"] || [cate isEqualToString:@"titleFont"]) {
+        for (UIButton *button in self.subviews) {
+            if ([button isKindOfClass:[UIButton class]]) {
+                if ([cate isEqualToString:@"titleColor"]){
+                    [button setTitleColor:self.titleColor forState:UIControlStateNormal];
+                }else if ([cate isEqualToString:@"selectColor"]){
+                    [button setTitleColor:self.selectColor forState:UIControlStateSelected];
+                }else if ([cate isEqualToString:@"titleFont"]){
+                    [button.titleLabel setFont:self.titleFont];
+                }
             }
+            
         }
-        
     }
     
 }
@@ -364,3 +391,4 @@ SegmentView *segment;
 }
 
 @end
+

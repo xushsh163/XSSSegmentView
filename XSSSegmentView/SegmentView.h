@@ -54,6 +54,10 @@
  */
 @property (strong, nonatomic) UIColor *segmentBackgroundColor;
 /**
+ *  选中时的背景色，不设置的话会采用默认值
+ */
+@property (strong, nonatomic) UIColor *selectedBackgroundColor;
+/**
  *  segment的字体颜色，不设置的话采用默认值
  */
 @property (strong, nonatomic) UIColor *titleColor;
@@ -99,3 +103,4 @@
  */
 -(void)addItemsWithFrame:(CGRect)frame titles:(NSArray *)titles selectedImage:(NSString *)selectedImage inView:(UIView *)view;
 @end
+
