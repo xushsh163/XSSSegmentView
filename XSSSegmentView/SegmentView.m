@@ -14,11 +14,11 @@
  ******************************************
  */
 //默认值：item背景色
-#define kSegmentBackgroundColor    [UIColor colorWithRed:253.0f/255 green:239.0f/255 blue:230.0f/255 alpha:1.0f]
+#define kSegmentBackgroundColor    [UIColor colorWithRed:0.0f/255 green:0.0f/255 blue:0.0f/255 alpha:0.0f]
 //默认值：未选中时字体的颜色
-#define  kTitleColor      [UIColor colorWithRed:77.0/255 green:77.0/255 blue:77.0/255 alpha:1.0f]
+#define  kTitleColor      [UIColor colorWithRed:222.0f/255 green:222.0f/255 blue:222.0f/255 alpha:1.0f]
 //默认值：选中时字体的颜色
-#define  kSelectedColor   [UIColor colorWithRed:233.0/255 green:97.0/255 blue:31.0/255 alpha:1.0f]
+#define  kSelectedColor   [UIColor colorWithRed:54.0/255 green:55.0f/255 blue:56.0f/255 alpha:1.0f]
 //默认值：字体的大小
 #define kTitleFont        [UIFont fontWithName:@".Helvetica Neue Interface" size:14.0f]
 //默认值：下划线颜色
@@ -67,7 +67,7 @@
         self.selectColor = kSelectedColor;
         // [self setBackgroundColor:self.segmentBackgroundColor];
         //使用kvo监测属性值变化
-        [self addObserver:self forKeyPath:@"segmentBackgroundColor" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:@"backgroundColor"];
+        [self addObserver:self forKeyPath:@"segmentBackgroundColor" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:@"segmentBackgroundColor"];
         [self addObserver:self forKeyPath:@"selectedBackgroundColor" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:@"selectedBackgroundColor"];
         [self addObserver:self forKeyPath:@"titleColor" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:@"titleColor"];
         [self addObserver:self forKeyPath:@"selectColor" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:@"selectColor"];
@@ -114,24 +114,35 @@
         [button setBackgroundColor:self.segmentBackgroundColor];
         [button setTag:i];
         [button addTarget:self action:@selector(changeTheSegment:) forControlEvents:UIControlEventTouchUpInside];
-        if (!lineView) {
-            lineView=[[UIView alloc]initWithFrame:CGRectMake((kDefaultIndex < itemCount ? kDefaultIndex: 0) * titleWidth, self.bounds.size.height-2, titleWidth, 2)];
-            [lineView setBackgroundColor:kDefaultLineColor];
-            [self addSubview:lineView];
-        }
         [self addSubview:button];
         [self.itemArray addObject:button];
+    }
+    if (!lineView) {
+        lineView=[[UIView alloc]initWithFrame:CGRectMake((kDefaultIndex < itemCount ? kDefaultIndex: 0) * titleWidth, self.bounds.size.height-2, titleWidth, 2)];
+        [lineView setBackgroundColor:kDefaultLineColor];
+        [self addSubview:lineView];
+    } else {
+        [lineView setFrame:CGRectMake((kDefaultIndex < itemCount ? kDefaultIndex: 0) * titleWidth, self.bounds.size.height-2, titleWidth, 2)];
     }
     if (kDefaultIndex < itemCount) {
         [self.itemArray[kDefaultIndex] setSelected:YES];
         [self.itemArray[kDefaultIndex] setBackgroundColor:self.selectedBackgroundColor];
+        [self selectIndex:kDefaultIndex];
+        [self.delegate didSelectSegmentAtIndex:self.selectedIndex];
     }else{
         [[self.itemArray firstObject] setSelected:YES];
         [[self.itemArray firstObject] setBackgroundColor:self.selectedBackgroundColor];
+        [self selectIndex:0];
+        [self.delegate didSelectSegmentAtIndex:0];
     }
 }
 
 -(void)resetItemView {
+    kDLOG(@"titleWidth=[%f],newWidth=[%f],oldHeight=[%f],newHeight=[%f]", titleWidth,
+          (self.bounds.size.width)/itemCount, lineView.frame.origin.y, self.bounds.size.height-2);
+    if (titleWidth == (self.bounds.size.width)/itemCount && lineView.frame.origin.y == self.bounds.size.height-2) {
+        return;
+    }
     itemCount = (int) self.itemArray.count;
     titleWidth=(self.bounds.size.width)/itemCount;
     // self.segmentBackgroundColor=[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f];
@@ -139,14 +150,13 @@
         UIButton* button = [self.itemArray objectAtIndex:i];
         // kDLOG(@"height=%f", self.bounds.size.height);
         [button setFrame:CGRectMake(i*titleWidth, 0, titleWidth, self.bounds.size.height-2)];
-        if (lineView) {
-            [lineView setFrame:CGRectMake((kDefaultIndex < itemCount ? kDefaultIndex: 0) * titleWidth, self.bounds.size.height-2, titleWidth, 2)];
-        }
     }
-    if (kDefaultIndex < itemCount) {
-        [self.itemArray[kDefaultIndex] setSelected:YES];
-    }else{
-        [[self.itemArray firstObject] setSelected:YES];
+    if (!lineView) {
+        lineView=[[UIView alloc]initWithFrame:CGRectMake(self.selectedIndex * titleWidth, self.bounds.size.height-2, titleWidth, 2)];
+        [lineView setBackgroundColor:kDefaultLineColor];
+        [self addSubview:lineView];
+    } else {
+        [lineView setFrame:CGRectMake(self.selectedIndex * titleWidth, self.bounds.size.height-2, titleWidth, 2)];
     }
 }
 
@@ -155,8 +165,11 @@
     [[self subviews]
      makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [self.itemArray removeAllObjects];
+    if (lineView) {
+        [lineView removeFromSuperview];
+        lineView = nil;
+    }
     [self addItems:items];
-    [self addSubview:lineView];
 }
 -(void)updateBackgroundColor{
     for (int i=0; i<self.itemArray.count; i++) {
@@ -201,30 +214,32 @@
 }
 -(void)changeTheSegment:(UIButton*)button
 {
-    [self selectIndex:button.tag];
-    buttonTag = (int)button.tag;
-    for (UIButton *btn in self.itemArray) {
-        if (button == btn) {
-            if (selectedImageName) {
-                [btn setImage:[UIImage imageNamed:selectedImageName] forState:UIControlStateNormal];
-                [btn setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, -btn.titleLabel.intrinsicContentSize.width)];
-                [btn setTitleEdgeInsets:UIEdgeInsetsMake(0, -btn.currentImage.size.width, 0, 0)];
-            }else{
-                [btn setTitleColor:self.titleColor forState:UIControlStateNormal];
-                [btn setTitleColor:self.selectColor forState:UIControlStateSelected];
-            }
-        }else{
-            btn.selected = NO;
-            if (selectedImageName) {
-                [btn setImage:nil forState:UIControlStateNormal];
-                [btn setImageEdgeInsets:UIEdgeInsetsZero];
-                [btn setTitleEdgeInsets:UIEdgeInsetsZero];
-            }else{
-                [btn setTitleColor:self.titleColor forState:UIControlStateNormal];
-                [btn setTitleColor:self.selectColor forState:UIControlStateSelected];
-            }
-        }
+    if (self.selectedIndex != button.tag) {
+        [self selectIndex:button.tag];
     }
+    //    buttonTag = (int)button.tag;
+    //    for (UIButton *btn in self.itemArray) {
+    //        if (button == btn) {
+    //            if (selectedImageName) {
+    //                [btn setImage:[UIImage imageNamed:selectedImageName] forState:UIControlStateNormal];
+    //                [btn setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, -btn.titleLabel.intrinsicContentSize.width)];
+    //                [btn setTitleEdgeInsets:UIEdgeInsetsMake(0, -btn.currentImage.size.width, 0, 0)];
+    //            }else{
+    //                [btn setTitleColor:self.titleColor forState:UIControlStateNormal];
+    //                [btn setTitleColor:self.selectColor forState:UIControlStateSelected];
+    //            }
+    //        }else{
+    //            btn.selected = NO;
+    //            if (selectedImageName) {
+    //                [btn setImage:nil forState:UIControlStateNormal];
+    //                [btn setImageEdgeInsets:UIEdgeInsetsZero];
+    //                [btn setTitleEdgeInsets:UIEdgeInsetsZero];
+    //            }else{
+    //                [btn setTitleColor:self.titleColor forState:UIControlStateNormal];
+    //                [btn setTitleColor:self.selectColor forState:UIControlStateSelected];
+    //            }
+    //        }
+    //    }
 }
 #pragma mark - 选中某个item，调用协议方法
 - (void)selectIndex:(NSInteger)index{
@@ -233,7 +248,7 @@
     }
 }
 -(void)handleSelectItemEventWith:(NSInteger )index{
-    if (index > itemCount) {
+    if (index >= itemCount) {
         return;
     }
     [self.itemArray[self.selectedIndex] setSelected:NO];
@@ -293,10 +308,12 @@
     NSString *cate = (__bridge NSString *)context;
     if ([cate isEqualToString:@"backgroundColor"]) {
         // [self setBackgroundColor:self.segmentBackgroundColor];
+        kDLOG(@"backgroundColor changed[%@]", self.segmentBackgroundColor);
         [self updateBackgroundColor];
     }
     if ([cate isEqualToString:@"selectedBackgroundColor"]) {
         // [self setBackgroundColor:self.segmentBackgroundColor];
+        kDLOG(@"selectedBackgroundColor changed[%@]", self.selectedBackgroundColor);
         [self updateBackgroundColor];
     }
     if ([cate isEqualToString:@"lineColor"]) {
