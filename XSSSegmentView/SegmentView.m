@@ -138,7 +138,7 @@
 }
 
 -(void)resetItemView {
-    kDLOG(@"titleWidth=[%f],newWidth=[%f],oldHeight=[%f],newHeight=[%f]", titleWidth,
+    // kDLOG(@"titleWidth=[%f],newWidth=[%f],oldHeight=[%f],newHeight=[%f]", titleWidth,
           (self.bounds.size.width)/itemCount, lineView.frame.origin.y, self.bounds.size.height-2);
     if (titleWidth == (self.bounds.size.width)/itemCount && lineView.frame.origin.y == self.bounds.size.height-2) {
         return;
@@ -308,12 +308,12 @@
     NSString *cate = (__bridge NSString *)context;
     if ([cate isEqualToString:@"backgroundColor"]) {
         // [self setBackgroundColor:self.segmentBackgroundColor];
-        kDLOG(@"backgroundColor changed[%@]", self.segmentBackgroundColor);
+        // kDLOG(@"backgroundColor changed[%@]", self.segmentBackgroundColor);
         [self updateBackgroundColor];
     }
     if ([cate isEqualToString:@"selectedBackgroundColor"]) {
         // [self setBackgroundColor:self.segmentBackgroundColor];
-        kDLOG(@"selectedBackgroundColor changed[%@]", self.selectedBackgroundColor);
+        // kDLOG(@"selectedBackgroundColor changed[%@]", self.selectedBackgroundColor);
         [self updateBackgroundColor];
     }
     if ([cate isEqualToString:@"lineColor"]) {
