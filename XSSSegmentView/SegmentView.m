@@ -65,6 +65,7 @@
         self.selectedBackgroundColor = kSegmentBackgroundColor;
         self.titleColor = kTitleColor;
         self.selectColor = kSelectedColor;
+        self.lineColor = kDefaultLineColor;
         // [self setBackgroundColor:self.segmentBackgroundColor];
         //使用kvo监测属性值变化
         [self addObserver:self forKeyPath:@"segmentBackgroundColor" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:@"segmentBackgroundColor"];
@@ -119,7 +120,7 @@
     }
     if (!lineView) {
         lineView=[[UIView alloc]initWithFrame:CGRectMake((kDefaultIndex < itemCount ? kDefaultIndex: 0) * titleWidth, self.bounds.size.height-2, titleWidth, 2)];
-        [lineView setBackgroundColor:kDefaultLineColor];
+        [lineView setBackgroundColor:self.lineColor];
         [self addSubview:lineView];
     } else {
         [lineView setFrame:CGRectMake((kDefaultIndex < itemCount ? kDefaultIndex: 0) * titleWidth, self.bounds.size.height-2, titleWidth, 2)];
@@ -139,7 +140,7 @@
 
 -(void)resetItemView {
     // kDLOG(@"titleWidth=[%f],newWidth=[%f],oldHeight=[%f],newHeight=[%f]", titleWidth,
-          (self.bounds.size.width)/itemCount, lineView.frame.origin.y, self.bounds.size.height-2);
+    //      (self.bounds.size.width)/itemCount, lineView.frame.origin.y, self.bounds.size.height-2);
     if (titleWidth == (self.bounds.size.width)/itemCount && lineView.frame.origin.y == self.bounds.size.height-2) {
         return;
     }
@@ -153,7 +154,7 @@
     }
     if (!lineView) {
         lineView=[[UIView alloc]initWithFrame:CGRectMake(self.selectedIndex * titleWidth, self.bounds.size.height-2, titleWidth, 2)];
-        [lineView setBackgroundColor:kDefaultLineColor];
+        [lineView setBackgroundColor:self.lineColor];
         [self addSubview:lineView];
     } else {
         [lineView setFrame:CGRectMake(self.selectedIndex * titleWidth, self.bounds.size.height-2, titleWidth, 2)];
@@ -374,13 +375,16 @@
 #pragma mark - 移除观察者
 - (void)dealloc
 {
-    [self removeObserver:self forKeyPath:@"segmentBackgroundColor" context:@"segmentBackgroundColor"];
-    [self removeObserver:self forKeyPath:@"titleColor" context:@"titleColor"];
-    [self removeObserver:self forKeyPath:@"selectColor" context:@"selectColor"];
-    [self removeObserver:self forKeyPath:@"titleFont" context:@"titleFont"];
-    [self removeObserver:self forKeyPath:@"segSubviews" context:@"segSubviews"];
-    [self removeObserver:self forKeyPath:@"subControllers" context:@"subControllers"];
-    [self removeObserver:self forKeyPath:@"selectedIndex" context:@"selectedIndex"];
+    /*
+     *  multiple instances of this View, if one of them release, it will cause "[NSKeyValueObservationInfo release]: message sent to deallocated instance". don't know how to fix, comment and it works fine.
+     */
+//    [self removeObserver:self forKeyPath:@"segmentBackgroundColor" context:@"segmentBackgroundColor"];
+//    [self removeObserver:self forKeyPath:@"titleColor" context:@"titleColor"];
+//    [self removeObserver:self forKeyPath:@"selectColor" context:@"selectColor"];
+//    [self removeObserver:self forKeyPath:@"titleFont" context:@"titleFont"];
+//    [self removeObserver:self forKeyPath:@"segSubviews" context:@"segSubviews"];
+//    [self removeObserver:self forKeyPath:@"subControllers" context:@"subControllers"];
+//    [self removeObserver:self forKeyPath:@"selectedIndex" context:@"selectedIndex"];
 }
 
 #pragma mark - 添加手势
