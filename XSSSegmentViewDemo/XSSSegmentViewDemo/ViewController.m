@@ -48,15 +48,17 @@
     
     
     
-    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(200, 290, 100, 60)];
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(200, 30, 100, 60)];
     button.backgroundColor = [UIColor grayColor];
     [button setTitle:@"点我" forState:UIControlStateNormal];
     [button addTarget:self action:@selector(buttonClick) forControlEvents:UIControlEventTouchUpInside];
-    [[[[UIApplication sharedApplication] windows] firstObject] addSubview:button];
+    // [[[[UIApplication sharedApplication] windows] firstObject] addSubview:button];
+    [self.view addSubview:button];
 }
 
 -(void)buttonClick{
-    seg.selectedIndex = 2;
+    // seg.selectedIndex = 2;
+    [seg selectIndex:2];
 }
 
 //0、简单使用
@@ -81,7 +83,7 @@
     [titleArry addObject:@"标题0"];
     [titleArry addObject:@"标题2"];
     [titleArry addObject:@"标题3"];
-    [seg addItems:titleArry frame:CGRectMake(0, 164, self.view.frame.size.width, 188) inView:self.view];
+    [seg addItems:titleArry frame:CGRectMake(0, 64, self.view.frame.size.width, 188) inView:self.view];
     viewArr = [[NSMutableArray alloc] init];
     for (int i=0; i<3; i++) {
         UIView *view = [[UIView alloc] init];

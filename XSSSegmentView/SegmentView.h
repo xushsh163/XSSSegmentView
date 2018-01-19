@@ -93,6 +93,7 @@
 -(void)addItems:(NSArray *)items frame:(CGRect )frame inView:(UIView *)view;
 -(void)addItems:(NSArray *)items;
 -(void)replaceItems:(NSArray *)items;
+-(void)selectIndex:(NSInteger)index;
 /**
  *  选中时有图片的接口
  *
